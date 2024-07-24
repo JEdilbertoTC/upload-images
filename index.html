@@ -133,9 +133,8 @@
             pdf.text(currentDate, pageWidth - margin, margin, { align: 'right' });
 
             const signatureY = pageHeight - 20;
-            pdf.text('Firma:', pageWidth / 2, signatureY, { align: 'center' });
 
-            pdf.save(`${fileName}.pdf`);
+            pdf.save(`${fileName.toUpperCase()}.pdf`);
             preview.innerHTML = '';
             images.length = 0;
             addImageButton.disabled = false;
