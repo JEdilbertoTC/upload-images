@@ -70,7 +70,7 @@
     </label>
     <label for="file-multi-select">
         Planta Origen:
-        <select id="file-multi-select" name="file-multi-select" multiple>
+        <select id="file-multi-select" multiple="multiple" name="file-multi-select" multiple>
             <option value="APZ">APZ</option>
             <option value="CRT">CRT</option>
         </select>
@@ -141,8 +141,8 @@
             const fileName = `${part1}_${date}_${selectValue}_${multiSelectValues.join('_')}`;
 
             const pdf = new jsPDF('p', 'mm', 'a4');
-            const pageWidth = 1500;
-            const pageHeight = 1000;
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
             const margin = 10;
             const imageWidth = (pageWidth - margin * 3) / 2;
             const imageHeight = (pageHeight - margin * 4 - 20) / 3;
