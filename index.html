@@ -14,6 +14,8 @@
         }
         #preview img {
             width: 100px;
+            height: 100px;
+            object-fit: cover;
             margin: 5px;
             padding: 10px;
         }
@@ -163,7 +165,7 @@
             pdf.text(currentDate, pageWidth - margin, margin, { align: 'right' });
 
             const signatureY = pageHeight - 20;
-            pdf.text('Firma:', pageWidth / 2, signatureY, { align: 'center' });
+            pdf.text(fileName.toUpperCase(), pageWidth / 2, signatureY, { align: 'center' });
 
             pdf.save(`${fileName.toUpperCase()}.pdf`);
             preview.innerHTML = '';
