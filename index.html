@@ -45,7 +45,11 @@
     <button id="addImageButton">Agregar Imagen</button>
     <div id="preview"></div>
     <button id="generatePdfButton">Generar PDF</button>
-
+    <br>
+    <label for="file-name">
+        Nombre del PDF:
+        <input type="text" id="file-name" name="file-name"/>
+    </label>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
         const { jsPDF } = window.jspdf;
@@ -84,8 +88,15 @@
         generatePdfButton.addEventListener('click', generatePDF);
 
         function generatePDF() {
+            const fileName = document.getElementById('file-name').value;
+
             if (images.length === 0) {
                 alert('Por favor, sube al menos una imagen');
+                return;
+            }
+
+            if (fileName.length === 0) {
+                alert('Por favor, escribe un nombre para el archivo');
                 return;
             }
 
@@ -111,12 +122,13 @@
             }
 
             const currentDate = new Date().toLocaleDateString();
+
             pdf.text(currentDate, pageWidth - margin, margin, { align: 'right' });
 
             const signatureY = pageHeight - 20;
             pdf.text('Firma:', pageWidth / 2, signatureY, { align: 'center' });
 
-            pdf.save(`${currentDate}.pdf`);
+            pdf.save(`${fileName}.pdf`);
             preview.innerHTML = '';
             images.length = 0;
             addImageButton.disabled = false;
