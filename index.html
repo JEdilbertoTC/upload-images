@@ -59,6 +59,7 @@
         const addImageButton = document.getElementById('addImageButton');
         const generatePdfButton = document.getElementById('generatePdfButton');
         const images = [];
+        const fileNameInput = document.getElementById('file-name');
 
         addImageButton.addEventListener('click', () => {
             if (images.length >= 6) {
@@ -88,7 +89,7 @@
         generatePdfButton.addEventListener('click', generatePDF);
 
         function generatePDF() {
-            const fileName = document.getElementById('file-name').value;
+            const fileName = fileNameInput.value;
 
             if (images.length === 0) {
                 alert('Por favor, sube al menos una imagen');
@@ -108,20 +109,17 @@
             const imageHeight = (pageHeight - margin * 4 - 20) / 3;
             let x = margin;
             let y = margin;
-            let rowCount = 0;
 
             for (let i = 0; i < images.length; i++) {
                 if (i > 0 && i % 6 === 0) {
                     pdf.addPage();
                     x = margin;
                     y = margin;
-                    rowCount = 0;
                 }
 
                 if (i % 2 === 0 && i !== 0) {
                     x = margin;
                     y += imageHeight + margin;
-                    rowCount++;
                 } else if (i % 2 !== 0) {
                     x = pageWidth / 2 + margin / 2;
                 }
@@ -133,11 +131,13 @@
             pdf.text(currentDate, pageWidth - margin, margin, { align: 'right' });
 
             const signatureY = pageHeight - 20;
+            pdf.text('Firma:', pageWidth / 2, signatureY, { align: 'center' });
 
             pdf.save(`${fileName.toUpperCase()}.pdf`);
             preview.innerHTML = '';
             images.length = 0;
             addImageButton.disabled = false;
+            fileNameInput.value = '';
         }
     </script>
 </body>
