@@ -36,20 +36,44 @@
             left: 10px;
             width: 100px;
         }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
     <img id="logo" src="https://www.integrity-la.com/wp-content/uploads/2016/10/Logo_Cemento_Moctezuma.png" alt="Logo Cementos Moctezuma">
-    <h1>Cargar Imágenes</h1>
+    <h1>Evidencias Fotográficas FF.CC</h1>
+
+    <label for="file-part1">
+        Placa furgón:
+        <input type="text" id="file-part1" name="file-part1"/>
+    </label>
+    <label for="file-date">
+        Fecha:
+        <input type="date" id="file-date" name="file-date"/>
+    </label>
+    <label for="file-select">
+        Reporte:
+        <select id="file-select" name="file-select">
+            <option value="Origen">Origen</option>
+            <option value="Destino">Destino</option>
+        </select>
+    </label>
+    <label for="file-multi-select">
+        Selección Múltiple:
+        <select id="file-multi-select" name="file-multi-select" multiple>
+            <option value="APZ">APZ</option>
+            <option value="CRT">CRT</option>
+        </select>
+    </label>
+
     <input type="file" id="imageUpload" accept="image/*" style="display:none">
     <button id="addImageButton">Agregar Imagen</button>
     <div id="preview"></div>
     <button id="generatePdfButton">Generar PDF</button>
-    <br>
-    <label for="file-name">
-        Nombre del PDF:
-        <input type="text" id="file-name" name="file-name"/>
-    </label>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
         const { jsPDF } = window.jspdf;
@@ -59,7 +83,10 @@
         const addImageButton = document.getElementById('addImageButton');
         const generatePdfButton = document.getElementById('generatePdfButton');
         const images = [];
-        const fileNameInput = document.getElementById('file-name');
+        const part1Input = document.getElementById('file-part1');
+        const dateInput = document.getElementById('file-date');
+        const selectInput = document.getElementById('file-select');
+        const multiSelectInput = document.getElementById('file-multi-select');
 
         addImageButton.addEventListener('click', () => {
             if (images.length >= 6) {
@@ -89,17 +116,22 @@
         generatePdfButton.addEventListener('click', generatePDF);
 
         function generatePDF() {
-            const fileName = fileNameInput.value;
+            const part1 = part1Input.value;
+            const date = dateInput.value;
+            const selectValue = selectInput.value;
+            const multiSelectValues = Array.from(multiSelectInput.selectedOptions).map(option => option.value);
 
             if (images.length === 0) {
                 alert('Por favor, sube al menos una imagen');
                 return;
             }
 
-            if (fileName.length === 0) {
-                alert('Por favor, escribe un nombre para el archivo');
+            if (part1.length === 0 || date.length === 0 || selectValue.length === 0 || multiSelectValues.length === 0) {
+                alert('Por favor, completa todos los campos');
                 return;
             }
+
+            const fileName = `${part1}_${date}_${selectValue}_${multiSelectValues.join('_')}`;
 
             const pdf = new jsPDF('p', 'mm', 'a4');
             const pageWidth = pdf.internal.pageSize.getWidth();
@@ -137,7 +169,10 @@
             preview.innerHTML = '';
             images.length = 0;
             addImageButton.disabled = false;
-            fileNameInput.value = '';
+            part1Input.value = '';
+            dateInput.value = '';
+            selectInput.value = '';
+            multiSelectInput.value = [];
         }
     </script>
 </body>
