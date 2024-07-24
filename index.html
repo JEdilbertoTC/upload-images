@@ -166,7 +166,6 @@
             }
 
             const currentDate = new Date().toLocaleDateString();
-            pdf.text(currentDate, pageWidth - margin, margin, { align: 'right' });
 
             const signatureY = pageHeight - 20;
             pdf.text(fileName.toUpperCase(), pageWidth / 2, signatureY, { align: 'center' });
