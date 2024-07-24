@@ -108,12 +108,20 @@
             const imageHeight = (pageHeight - margin * 4 - 20) / 3;
             let x = margin;
             let y = margin;
-
+            let rowCount = 0;
 
             for (let i = 0; i < images.length; i++) {
+                if (i > 0 && i % 6 === 0) {
+                    pdf.addPage();
+                    x = margin;
+                    y = margin;
+                    rowCount = 0;
+                }
+
                 if (i % 2 === 0 && i !== 0) {
                     x = margin;
                     y += imageHeight + margin;
+                    rowCount++;
                 } else if (i % 2 !== 0) {
                     x = pageWidth / 2 + margin / 2;
                 }
@@ -122,7 +130,6 @@
             }
 
             const currentDate = new Date().toLocaleDateString();
-
             pdf.text(currentDate, pageWidth - margin, margin, { align: 'right' });
 
             const signatureY = pageHeight - 20;
