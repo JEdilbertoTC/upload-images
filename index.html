@@ -5,18 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cargar Imágenes y Generar PDF</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
+        }
         #preview img {
             width: 100px;
             margin: 5px;
+            padding: 10px;
+        }
+        #addImageButton, #generatePdfButton {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #FFFFFF;
+            border: none;
+            cursor: pointer;
+        }
+        #addImageButton:disabled {
+            background-color: #CCCCCC;
+            cursor: not-allowed;
+        }
+        #logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 100px;
         }
     </style>
 </head>
 <body>
+    <img id="logo" src="https://www.integrity-la.com/wp-content/uploads/2016/10/Logo_Cemento_Moctezuma.png" alt="Logo Cementos Moctezuma">
     <h1>Cargar Imágenes</h1>
     <input type="file" id="imageUpload" accept="image/*" style="display:none">
     <button id="addImageButton">Agregar Imagen</button>
     <div id="preview"></div>
-    <button onclick="generatePDF()">Generar PDF</button>
+    <button id="generatePdfButton">Generar PDF</button>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
@@ -25,6 +53,7 @@
         const preview = document.getElementById('preview');
         const imageUpload = document.getElementById('imageUpload');
         const addImageButton = document.getElementById('addImageButton');
+        const generatePdfButton = document.getElementById('generatePdfButton');
         const images = [];
 
         addImageButton.addEventListener('click', () => {
@@ -52,6 +81,8 @@
             }
         });
 
+        generatePdfButton.addEventListener('click', generatePDF);
+
         function generatePDF() {
             if (images.length === 0) {
                 alert('Por favor, sube al menos una imagen');
@@ -67,6 +98,7 @@
             let x = margin;
             let y = margin;
 
+
             for (let i = 0; i < images.length; i++) {
                 if (i % 2 === 0 && i !== 0) {
                     x = margin;
@@ -78,11 +110,13 @@
                 pdf.addImage(images[i], 'JPEG', x, y, imageWidth, imageHeight);
             }
 
-            // Agregar sección para firma en el centro del pie de página
+            const currentDate = new Date().toLocaleDateString();
+            pdf.text(currentDate, pageWidth - margin, margin, { align: 'right' });
+
             const signatureY = pageHeight - 20;
             pdf.text('Firma:', pageWidth / 2, signatureY, { align: 'center' });
 
-            pdf.save('imagenes.pdf');
+            pdf.save(`${currentDate}.pdf`);
         }
     </script>
 </body>
