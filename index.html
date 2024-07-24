@@ -13,15 +13,16 @@
             position: relative;
         }
         #preview {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             gap: 10px;
             margin-top: 20px;
         }
         #preview img {
-            width: 100px;
-            height: 100px;
+            width: 100%;
+            height: auto;
             object-fit: cover;
+            max-height: 100px;
         }
         #addImageButton, #generatePdfButton {
             display: inline-block;
@@ -149,23 +150,24 @@
             let y = margin;
 
             for (let i = 0; i < images.length; i++) {
-                // if (i > 0 && i % 6 === 0) {
-                //     pdf.addPage();
-                //     x = margin;
-                //     y = margin;
-                // }
+                if (i > 0 && i % 6 === 0) {
+                    pdf.addPage();
+                    x = margin;
+                    y = margin;
+                }
 
-                // if (i % 2 === 0 && i !== 0) {
-                //     x = margin;
-                //     y += imageHeight + margin;
-                // } else if (i % 2 !== 0) {
-                //     x = pageWidth / 2 + margin / 2;
-                // }
+                if (i % 2 === 0 && i !== 0) {
+                    x = margin;
+                    y += imageHeight + margin;
+                } else if (i % 2 !== 0) {
+                    x = pageWidth / 2 + margin / 2;
+                }
 
                 pdf.addImage(images[i], 'JPEG', x, y, imageWidth, imageHeight);
             }
 
             const currentDate = new Date().toLocaleDateString();
+            pdf.text(currentDate, pageWidth - margin, margin, { align: 'right' });
 
             const signatureY = pageHeight - 20;
             pdf.text(fileName.toUpperCase(), pageWidth / 2, signatureY, { align: 'center' });
