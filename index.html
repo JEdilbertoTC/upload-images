@@ -149,18 +149,18 @@
             let y = margin;
 
             for (let i = 0; i < images.length; i++) {
-                if (i > 0 && i % 6 === 0) {
-                    pdf.addPage();
-                    x = margin;
-                    y = margin;
-                }
+                // if (i > 0 && i % 6 === 0) {
+                //     pdf.addPage();
+                //     x = margin;
+                //     y = margin;
+                // }
 
-                if (i % 2 === 0 && i !== 0) {
-                    x = margin;
-                    y += imageHeight + margin;
-                } else if (i % 2 !== 0) {
-                    x = pageWidth / 2 + margin / 2;
-                }
+                // if (i % 2 === 0 && i !== 0) {
+                //     x = margin;
+                //     y += imageHeight + margin;
+                // } else if (i % 2 !== 0) {
+                //     x = pageWidth / 2 + margin / 2;
+                // }
 
                 pdf.addImage(images[i], 'JPEG', x, y, imageWidth, imageHeight);
             }
