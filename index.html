@@ -132,15 +132,15 @@
             const selectValue = selectInput.value;
             const multiSelectValues = Array.from(multiSelectInput.selectedOptions).map(option => option.value);
 
-            // if (images.length === 0) {
-            //     alert('Por favor, sube al menos una imagen');
-            //     return;
-            // }
+            if (images.length === 0) {
+                alert('Por favor, sube al menos una imagen');
+                return;
+            }
 
-            // if (part1.length === 0 || date.length === 0 || selectValue.length === 0 || multiSelectValues.length === 0) {
-            //     alert('Por favor, completa todos los campos');
-            //     return;
-            // }
+            if (part1.length === 0 || date.length === 0 || selectValue.length === 0 || multiSelectValues.length === 0) {
+                alert('Por favor, completa todos los campos');
+                return;
+            }
 
             const fileName = `${part1}_${date}_${selectValue}_${multiSelectValues.join('_')}`;
 
