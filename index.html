@@ -117,6 +117,9 @@
             pdf.text('Firma:', pageWidth / 2, signatureY, { align: 'center' });
 
             pdf.save(`${currentDate}.pdf`);
+            preview.innerHTML = '';
+            images.length = 0;
+            addImageButton.disabled = false;
         }
     </script>
 </body>
