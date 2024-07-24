@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargar Imágenes y Generar PDF</title>
+    <style>
+        #preview img {
+            width: 100px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cargar Imágenes</h1>
+    <input type="file" id="imageUpload" accept="image/*" style="display:none">
+    <button id="addImageButton">Agregar Imagen</button>
+    <div id="preview"></div>
+    <button onclick="generatePDF()">Generar PDF</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        const { jsPDF } = window.jspdf;
+
+        const preview = document.getElementById('preview');
+        const imageUpload = document.getElementById('imageUpload');
+        const addImageButton = document.getElementById('addImageButton');
+        const images = [];
+
+        addImageButton.addEventListener('click', () => {
+            if (images.length >= 6) {
+                alert('Solo puedes subir un máximo de 6 imágenes');
+                return;
+            }
+            imageUpload.click();
+        });
+
+        imageUpload.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    preview.appendChild(img);
+                    images.push(e.target.result);
+                    if (images.length >= 6) {
+                        addImageButton.disabled = true;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function generatePDF() {
+            if (images.length === 0) {
+                alert('Por favor, sube al menos una imagen');
+                return;
+            }
+
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const margin = 10;
+            const imageWidth = (pageWidth - margin * 3) / 2;
+            const imageHeight = (pageHeight - margin * 4 - 20) / 3;
+            let x = margin;
+            let y = margin;
+
+            for (let i = 0; i < images.length; i++) {
+                if (i % 2 === 0 && i !== 0) {
+                    x = margin;
+                    y += imageHeight + margin;
+                } else if (i % 2 !== 0) {
+                    x = pageWidth / 2 + margin / 2;
+                }
+
+                pdf.addImage(images[i], 'JPEG', x, y, imageWidth, imageHeight);
+            }
+
+            // Agregar sección para firma en el centro del pie de página
+            const signatureY = pageHeight - 20;
+            pdf.text('Firma:', pageWidth / 2, signatureY, { align: 'center' });
+
+            pdf.save('imagenes.pdf');
+        }
+    </script>
+</body>
+</html>
