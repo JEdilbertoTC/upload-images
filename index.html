@@ -236,27 +236,27 @@
             const deslizable = deslizableInput.value;
             const fleje = flejeInput.value;
 
-            if (images.length === 0) {
-                alert('Por favor, sube al menos una imagen');
-                return;
-            }
+            // if (images.length === 0) {
+            //     alert('Por favor, sube al menos una imagen');
+            //     return;
+            // }
 
-            if (
-                !placa.length ||
-                !fecha.length ||
-                !reporte.length ||
-                !ubicacion.length ||
-                !matricula.length ||
-                !tarima.length ||
-                !caseton20.length ||
-                !caseton30.length ||
-                !hebillas.length ||
-                !deslizable.length ||
-                !fleje.length
-            ) {
-                alert('Por favor, completa todos los campos');
-                return;
-            }
+            // if (
+            //     !placa.length ||
+            //     !fecha.length ||
+            //     !reporte.length ||
+            //     !ubicacion.length ||
+            //     !matricula.length ||
+            //     !tarima.length ||
+            //     !caseton20.length ||
+            //     !caseton30.length ||
+            //     !hebillas.length ||
+            //     !deslizable.length ||
+            //     !fleje.length
+            // ) {
+            //     alert('Por favor, completa todos los campos');
+            //     return;
+            // }
 
             const fileName = `${matricula}_${placa}_${fecha}_${reporte}_${ubicacion}`;
 
@@ -268,7 +268,7 @@
             const imageHeight = (pageHeight - margin * 4 - 20) / 3;
             const logoWidth = 30;
             const logoHeight = 10;
-            let x = margin + pageWidth / 2;
+            let x = margin / 2 + pageWidth / 2;
             let y = margin + logoHeight;
 
             const addLogo = () => {
@@ -293,6 +293,7 @@
 
             addLogo();
 
+            const total = images.length;
             for (let i = 0; i < images.length + 1; i++) {
                 if(i === 0) {
                     addTable();
@@ -312,7 +313,7 @@
                     y = margin + logoHeight;
                 }
 
-                pdf.addImage(images[i], 'JPEG', x, y, imageWidth, imageHeight);
+                pdf.addImage(images[i - 1], 'JPEG', x, y, imageWidth, imageHeight);
             }
 
             const currentDate = new Date().toLocaleDateString();
