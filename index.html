@@ -292,9 +292,12 @@
             };
 
             addLogo();
-            addTable();
 
-            for (let i = 0; i < images.length; i++) {
+            for (let i = 0; i < images.length + 1; i++) {
+                if(i === 0) {
+                    addTable();
+                    continue;
+                }
                 if (i % 2 === 0 && i !== 0) {
                     x = margin;
                     y += imageHeight + margin;
