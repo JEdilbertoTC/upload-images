@@ -20,6 +20,7 @@ const deslizableInput = document.getElementById('deslizable');
 const flejeInput = document.getElementById('fleje');
 
 const logo = './logo.png';
+
 addImageButton.addEventListener('click', () => {
     if (images.length >= maxNumberOfImages) {
         alert('Solo puedes subir un máximo de 6 imágenes');
@@ -27,6 +28,7 @@ addImageButton.addEventListener('click', () => {
     }
     imageUpload.click();
 });
+
 imageUpload.addEventListener('change', (event) => {
     const files = event.target.files;
     const maxFiles = maxNumberOfImages - images.length;
@@ -34,18 +36,23 @@ imageUpload.addEventListener('change', (event) => {
     for (let i = 0; i < Math.min(files.length, maxFiles); i++) {
         const file = files[i];
         const reader = new FileReader();
-        reader.onload = function (e) {
-            const image = `<div class="position-relative d-inline-block m-2">
-            <img src="${e.target.result}" class="img-fluid rounded">
-            <button class="delete btn btn-danger btn-sm position-absolute top-0 end-0" type="button">&times;</button>
-            </div>`;
 
-            preview.innerHTML += image
-
-            const deleteButtons = preview.querySelectorAll('.delete');
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', (event) => {
-                    if(confirm('¿Estás seguro de borrar la fotografia?')) {
+        reader.onload = (function(file) {
+            return function(e) {
+                const imageSrc = e.target.result;
+                const image = document.createElement('div');
+                image.classList.add('position-relative', 'd-inline-block', 'm-2');
+                
+                const imgElement = document.createElement('img');
+                imgElement.src = imageSrc;
+                imgElement.classList.add('img-fluid', 'rounded');
+                
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('delete', 'btn', 'btn-danger', 'btn-sm', 'position-absolute', 'top-0', 'end-0');
+                deleteButton.type = 'button';
+                deleteButton.innerHTML = '&times;';
+                deleteButton.addEventListener('click', (event) => {
+                    if (confirm('¿Estás seguro de borrar la fotografía?')) {
                         const imgContainer = event.target.parentElement;
                         preview.removeChild(imgContainer);
                         const imgSrc = imgContainer.querySelector('img').src;
@@ -58,16 +65,22 @@ imageUpload.addEventListener('change', (event) => {
                         }
                     }
                 });
-            });
 
-            images.push(e.target.result);
-            if (images.length >= maxNumberOfImages) {
-                addImageButton.disabled = true;
-            }
-        };
+                image.appendChild(imgElement);
+                image.appendChild(deleteButton);
+                preview.appendChild(image);
+
+                images.push(imageSrc);
+                if (images.length >= maxNumberOfImages) {
+                    addImageButton.disabled = true;
+                }
+            };
+        })(file);
+
         reader.readAsDataURL(file);
     }
 });
+
 
 generatePdfButton.addEventListener('click', () => {
     showSpinner();
