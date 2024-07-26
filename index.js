@@ -119,7 +119,7 @@ async function generatePDF() {
     const pageHeight = pdf.internal.pageSize.getHeight();
     const margin = 10;
     const imageWidth = (pageWidth - margin * 3) / 2;
-    const imageHeight = (pageHeight - margin * 4 - 20) / 3;
+    const imageHeight = (pageHeight - margin * 3) / 2;
     const logoWidth = 30;
     const logoHeight = 10;
     let x = margin / 2 + pageWidth / 2;
