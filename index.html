@@ -236,27 +236,27 @@
             const deslizable = deslizableInput.value;
             const fleje = flejeInput.value;
 
-            // if (images.length === 0) {
-            //     alert('Por favor, sube al menos una imagen');
-            //     return;
-            // }
+            if (images.length === 0) {
+                alert('Por favor, sube al menos una imagen');
+                return;
+            }
 
-            // if (
-            //     !placa.length ||
-            //     !fecha.length ||
-            //     !reporte.length ||
-            //     !ubicacion.length ||
-            //     !matricula.length ||
-            //     !tarima.length ||
-            //     !caseton20.length ||
-            //     !caseton30.length ||
-            //     !hebillas.length ||
-            //     !deslizable.length ||
-            //     !fleje.length
-            // ) {
-            //     alert('Por favor, completa todos los campos');
-            //     return;
-            // }
+            if (
+                !placa.length ||
+                !fecha.length ||
+                !reporte.length ||
+                !ubicacion.length ||
+                !matricula.length ||
+                !tarima.length ||
+                !caseton20.length ||
+                !caseton30.length ||
+                !hebillas.length ||
+                !deslizable.length ||
+                !fleje.length
+            ) {
+                alert('Por favor, completa todos los campos');
+                return;
+            }
 
             const fileName = `${matricula}_${placa}_${fecha}_${reporte}_${ubicacion}`;
 
