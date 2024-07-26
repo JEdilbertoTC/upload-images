@@ -27,7 +27,6 @@ addImageButton.addEventListener('click', () => {
     }
     imageUpload.click();
 });
-
 imageUpload.addEventListener('change', (event) => {
     const files = event.target.files;
     const maxFiles = maxNumberOfImages - images.length;
@@ -36,9 +35,31 @@ imageUpload.addEventListener('change', (event) => {
         const file = files[i];
         const reader = new FileReader();
         reader.onload = function (e) {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            preview.appendChild(img);
+            const image = `<div class="position-relative d-inline-block m-2">
+            <img src="${e.target.result}" class="img-fluid rounded">
+            <button class="delete btn btn-danger btn-sm position-absolute top-0 end-0" type="button">&times;</button>
+            </div>`;
+
+            preview.innerHTML += image
+
+            const deleteButtons = preview.querySelectorAll('.delete');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    if(confirm('¿Estás seguro de borrar la fotografia?')) {
+                        const imgContainer = event.target.parentElement;
+                        preview.removeChild(imgContainer);
+                        const imgSrc = imgContainer.querySelector('img').src;
+                        const index = images.indexOf(imgSrc);
+                        if (index > -1) {
+                            images.splice(index, 1);
+                        }
+                        if (images.length < maxNumberOfImages) {
+                            addImageButton.disabled = false;
+                        }
+                    }
+                });
+            });
+
             images.push(e.target.result);
             if (images.length >= maxNumberOfImages) {
                 addImageButton.disabled = true;
@@ -126,7 +147,6 @@ async function generatePDF() {
 
     addLogo();
 
-    const total = images.length;
     for (let i = 0; i < images.length + 1; i++) {
         if(i === 0) {
             addTable();
@@ -148,8 +168,6 @@ async function generatePDF() {
 
         pdf.addImage(images[i - 1], 'JPEG', x, y, imageWidth, imageHeight);
     }
-
-    const currentDate = new Date().toLocaleDateString();
 
     const signatureY = pageHeight - 10;
     pdf.text(fileName.toUpperCase(), pageWidth / 2, signatureY, { align: 'center' });
